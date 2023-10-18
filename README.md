@@ -29,6 +29,9 @@ pip install --upgrade google-api-python-client
 # install the google-auth-oauthlib and google-auth-httplib2 libraries for user authorization.
 pip install --upgrade google-auth-oauthlib google-auth-httplib2
 
+# install yt-dlp
+python3 -m pip install -U yt-dlp
+
 # run the file
 python scheduler.py
 ```

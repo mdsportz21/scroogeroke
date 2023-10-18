@@ -9,6 +9,7 @@ import os
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+from yt_dlp import YoutubeDL
 
 SCOPES = ["https://www.googleapis.com/auth/youtube"]
 API_SERVICE_NAME = "youtube"
@@ -18,15 +19,24 @@ API_VERSION = "v3"
 PLAYLIST_ID = 'PLINB3ebud-ZjoTqhFjN90TyW8VGbLfxQr'
 FETCH_PLAYLIST_ITEMS_LIMIT = 5
 
+YDL_OPTS = {
+    'paths': {
+        'home': '/Users/ttaylor/Movies/scroogeroke'
+    }
+}
+
 
 def main():
     # debug_fetch_playlist_items()
     # debug_delete_playlist_item()
+    debug_download_video()
     pass
 
 
 def debug_download_video():
-
+    urls = ['https://www.youtube.com/watch?v=HuA4-D9S3Gw']
+    with YoutubeDL(YDL_OPTS) as ydl:
+        ydl.download(urls)
     pass
 
 
