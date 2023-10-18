@@ -34,15 +34,15 @@ def main():
 
 
 def debug_download_and_delete_playlist_items():
-    youtube = create_api_client()
-    download_and_delete_playlist_items(youtube)
+    youtube_client = create_api_client()
+    download_and_delete_playlist_items(youtube_client)
 
 
-def download_and_delete_playlist_items(youtube):
-    playlist_items = fetch_playlist_items(youtube, PLAYLIST_ID)
+def download_and_delete_playlist_items(youtube_client):
+    playlist_items = fetch_playlist_items(youtube_client, PLAYLIST_ID)
     for item in playlist_items:
         download_playlist_item(item)
-        delete_playlist_item(item, youtube)
+        delete_playlist_item(item, youtube_client)
 
 
 def download_playlist_item(item):
@@ -60,20 +60,20 @@ def debug_download_video():
 
 
 def debug_delete_playlist_item():
-    youtube = create_api_client()
-    playlist_items = fetch_playlist_items(youtube, PLAYLIST_ID)
+    youtube_client = create_api_client()
+    playlist_items = fetch_playlist_items(youtube_client, PLAYLIST_ID)
     for item in playlist_items:
-        delete_playlist_item(item, youtube)
+        delete_playlist_item(item, youtube_client)
 
 
-def delete_playlist_item(item, youtube):
+def delete_playlist_item(item, youtube_client):
     snippet = item['snippet']
     title = snippet['title']
     playlist_id = snippet['playlistId']
     print(f'Deleting {title} from {playlist_id}')
 
     item_id = item['id']
-    request = youtube.playlistItems().delete(
+    request = youtube_client.playlistItems().delete(
         id=item_id
     )
     request.execute()
@@ -81,14 +81,14 @@ def delete_playlist_item(item, youtube):
 
 
 def debug_fetch_playlist_items():
-    youtube = create_api_client()
-    playlist_items = fetch_playlist_items(youtube, PLAYLIST_ID)
+    youtube_client = create_api_client()
+    playlist_items = fetch_playlist_items(youtube_client, PLAYLIST_ID)
     print(playlist_items)
 
 
-def fetch_playlist_items(youtube, playlist_id):
+def fetch_playlist_items(youtube_client, playlist_id):
     print(f'Fetching playlist items for playlist={playlist_id}')
-    request = youtube.playlistItems().list(
+    request = youtube_client.playlistItems().list(
         part="snippet,contentDetails",
         maxResults=FETCH_PLAYLIST_ITEMS_LIMIT,
         playlistId=playlist_id
@@ -102,9 +102,9 @@ def fetch_playlist_items(youtube, playlist_id):
 def create_api_client():
     credentials = get_credentials()
     # create an API client
-    youtube = googleapiclient.discovery.build(
+    youtube_client = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
-    return youtube
+    return youtube_client
 
 
 def get_credentials():
