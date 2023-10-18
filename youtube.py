@@ -29,15 +29,34 @@ YDL_OPTS = {
 def main():
     # debug_fetch_playlist_items()
     # debug_delete_playlist_item()
-    debug_download_video()
-    pass
+    # debug_download_video()
+    debug_download_and_delete_playlist_items()
+
+
+def debug_download_and_delete_playlist_items():
+    youtube = create_api_client()
+    download_and_delete_playlist_items(youtube)
+
+
+def download_and_delete_playlist_items(youtube):
+    playlist_items = fetch_playlist_items(youtube, PLAYLIST_ID)
+    for item in playlist_items:
+        download_playlist_item(item)
+        delete_playlist_item(item, youtube)
+
+
+def download_playlist_item(item):
+    video_id = item["snippet"]["resourceId"]["videoId"]
+    url = f'https://www.youtube.com/watch?v={video_id}'
+    urls = [url]
+    with YoutubeDL(YDL_OPTS) as ydl:
+        ydl.download(urls)
 
 
 def debug_download_video():
     urls = ['https://www.youtube.com/watch?v=HuA4-D9S3Gw']
     with YoutubeDL(YDL_OPTS) as ydl:
         ydl.download(urls)
-    pass
 
 
 def debug_delete_playlist_item():
