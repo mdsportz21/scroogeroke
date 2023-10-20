@@ -1,3 +1,7 @@
+"""
+Runs a recurring task that downloads videos from a playlist and deletes them from the playlist.
+"""
+
 import sched
 import time
 import datetime

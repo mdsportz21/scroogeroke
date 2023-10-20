@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-
-# Sample Python code for youtube.playlistItems.list
-# See instructions for running these code samples locally:
-# https://developers.google.com/explorer-help/code-samples#python
+"""
+Downloads videos using https://github.com/yt-dlp/yt-dlp.
+Deletes videos from playlists using https://developers.google.com/youtube/v3/quickstart/python.
+"""
 
 import os
 
@@ -15,30 +14,21 @@ SCOPES = ["https://www.googleapis.com/auth/youtube"]
 API_SERVICE_NAME = "youtube"
 API_VERSION = "v3"
 
-# ID for https://www.youtube.com/playlist?list=PLINB3ebud-ZjoTqhFjN90TyW8VGbLfxQr
-PLAYLIST_ID = 'PLINB3ebud-ZjoTqhFjN90TyW8VGbLfxQr'
+PLAYLIST_ID = os.environ['YOUTUBE_PLAYLIST_ID']
 FETCH_PLAYLIST_ITEMS_LIMIT = 5
 
 YDL_OPTS = {
     'paths': {
-        'home': '/Users/ttaylor/Movies/scroogeroke'
+        'home': os.environ['YOUTUBE_DOWNLOAD_DIR']
     }
 }
 
 
-def main():
-    # debug_fetch_playlist_items()
-    # debug_delete_playlist_item()
-    # debug_download_video()
-    debug_download_and_delete_playlist_items()
-
-
-def debug_download_and_delete_playlist_items():
-    youtube_client = create_api_client()
-    download_and_delete_playlist_items(youtube_client)
-
-
 def download_and_delete_playlist_items(youtube_client):
+    """
+    Downloads a batch of videos from a given playlist and deletes them.
+    :param youtube_client:
+    """
     playlist_items = fetch_playlist_items(youtube_client, PLAYLIST_ID)
     for item in playlist_items:
         download_playlist_item(item)
@@ -46,6 +36,11 @@ def download_and_delete_playlist_items(youtube_client):
 
 
 def download_playlist_item(item):
+    """
+    Downloads the given video.
+    :param item:
+    :return:
+    """
     video_id = item["snippet"]["resourceId"]["videoId"]
     url = f'https://www.youtube.com/watch?v={video_id}'
     urls = [url]
@@ -53,20 +48,13 @@ def download_playlist_item(item):
         ydl.download(urls)
 
 
-def debug_download_video():
-    urls = ['https://www.youtube.com/watch?v=HuA4-D9S3Gw']
-    with YoutubeDL(YDL_OPTS) as ydl:
-        ydl.download(urls)
-
-
-def debug_delete_playlist_item():
-    youtube_client = create_api_client()
-    playlist_items = fetch_playlist_items(youtube_client, PLAYLIST_ID)
-    for item in playlist_items:
-        delete_playlist_item(item, youtube_client)
-
-
 def delete_playlist_item(item, youtube_client):
+    """
+    Deletes the given video from the playlist.
+    :param item:
+    :param youtube_client:
+    :return:
+    """
     snippet = item['snippet']
     title = snippet['title']
     playlist_id = snippet['playlistId']
@@ -80,13 +68,13 @@ def delete_playlist_item(item, youtube_client):
     print(f'Deleted {title} from {playlist_id}')
 
 
-def debug_fetch_playlist_items():
-    youtube_client = create_api_client()
-    playlist_items = fetch_playlist_items(youtube_client, PLAYLIST_ID)
-    print(playlist_items)
-
-
 def fetch_playlist_items(youtube_client, playlist_id):
+    """
+    Fetches a portion of Playlist Items from Youtube.
+    :param youtube_client:
+    :param playlist_id:
+    :return:
+    """
     print(f'Fetching playlist items for playlist={playlist_id}')
     request = youtube_client.playlistItems().list(
         part="snippet,contentDetails",
@@ -100,6 +88,10 @@ def fetch_playlist_items(youtube_client, playlist_id):
 
 
 def create_api_client():
+    """
+    Creates a credentialed Youtube API client
+    :return:
+    """
     credentials = get_credentials()
     # create an API client
     youtube_client = googleapiclient.discovery.build(
@@ -108,6 +100,10 @@ def create_api_client():
 
 
 def get_credentials():
+    """
+    Fetches and transforms the credentials
+    :return:
+    """
     # Disable OAuthlib's HTTPS verification when running locally.
     # *DO NOT* leave this option enabled in production.
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -117,7 +113,3 @@ def get_credentials():
         client_secrets_file, SCOPES)
     credentials = flow.run_local_server()
     return credentials
-
-
-if __name__ == "__main__":
-    main()

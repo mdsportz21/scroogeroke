@@ -1,21 +1,12 @@
 # scroogeroke
 
-## server setup
-```shell
-# Create virtual environment
-virtualenv scroogeroke
+This is a script that polls a youtube playlist for videos, downloads the videos, and deletes 
+them from the playlist.
 
-# Change default python to virtual one
-source scroogeroke/bin/activate
+## setup
 
-# Install bottle to virtual environment
-pip install -U bottle
+### install libraries
 
-# Run the file
-python server.py
-```
-
-## scheduler setup
 ```shell
 # Create virtual environment
 virtualenv scroogeroke
@@ -31,6 +22,30 @@ pip install --upgrade google-auth-oauthlib google-auth-httplib2
 
 # install yt-dlp
 python3 -m pip install -U yt-dlp
+```
+
+### generate credentials
+
+Follow the [Youtube Data API Python Quickstart instructions](https://developers.google.com/youtube/v3/quickstart/python)
+to generate credentials. Copy the credentials file to the root and name it `YOUR_CLIENT_SECRET_FILE.json`.
+
+### add env vars
+
+Create two environment variables.
+
+```shell
+# The ID of the youtube playlist that you want to poll
+export YOUTUBE_PLAYLIST_ID=<your_youtube_playlist_id>
+# The location that you want your videos to download to
+export YOUTUBE_DOWNLOAD_DIR=<your_download_dir>
+```
+
+## run
+
+```shell
+
+# Change default python to virtual one
+source scroogeroke/bin/activate
 
 # run the file
 python scheduler.py
