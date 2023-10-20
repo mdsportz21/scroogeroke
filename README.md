@@ -1,11 +1,19 @@
 # scroogeroke
 
-This is a script that polls a youtube playlist for videos, downloads the videos, and deletes 
-them from the playlist.
+This repo contains two scripts:
 
-## setup
+1. A Google Apps Script that reads additions to a Google Sheet and adds corresponding YouTube videos to a playlist.
+2. A Python scrip that polls a YouTube playlist for videos, downloads the videos, and deletes them from the playlist.
 
-### install libraries
+## Google Apps Script
+
+See [README.md](./google-apps-script/README.md)
+
+## Python Script
+
+### setup
+
+#### install libraries
 
 ```shell
 # Create virtual environment
@@ -24,12 +32,12 @@ pip install --upgrade google-auth-oauthlib google-auth-httplib2
 python3 -m pip install -U yt-dlp
 ```
 
-### generate credentials
+#### generate credentials
 
 Follow the [Youtube Data API Python Quickstart instructions](https://developers.google.com/youtube/v3/quickstart/python)
 to generate credentials. Copy the credentials file to the root and name it `YOUR_CLIENT_SECRET_FILE.json`.
 
-### add env vars
+#### add env vars
 
 Create two environment variables.
 
@@ -40,7 +48,7 @@ export YOUTUBE_PLAYLIST_ID=<your_youtube_playlist_id>
 export YOUTUBE_DOWNLOAD_DIR=<your_download_dir>
 ```
 
-## run
+### run
 
 ```shell
 
